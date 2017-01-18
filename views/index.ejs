@@ -1,0 +1,38 @@
+<% include top %>
+<html>
+<head>
+    <style>
+        body {
+            background: white;
+            display: -webkit-flex;
+            -webkit-justify-content: center;
+            -webkit-align-items: center;
+            -webkit-flex-direction: column;
+        }
+        video {
+            width: 640px;
+            height: 480px;
+            border: 1px solid #e2e2e2;
+        }
+    </style>
+</head>
+<body>
+<div>
+<video id="video" autobuffer controls hidden></video>
+    <div id="google">
+        <iframe src="https://docs.google.com/presentation/d/1O_hTAj3_IuJUzezzha4PXlY9kib4KOgQV88XSwOprx8/embed?start=false&loop=false&delayms=3000" frameborder="0" width="960" height="749" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+    </div>
+<p>
+    <button id="start">start</button>
+    <button id="stop" disabled >stop</button>
+    <button id="play" disabled>play</button>
+</p>
+</div>
+<div>
+<div id="install-button"></div>
+</div>
+</body>
+</html>
+
+
+<% include bottom %>

@@ -1,0 +1,20 @@
+First, generate a private key
+openssl genrsa 1024 > key.pem
+This will store a 1024 bit RSA key in the file key.pem
+Then, generate an SSL certificate with that key:
+openssl req -x509 -new -key key.pem > key-cert.pem
+Now, you can use key.pem and key-cert.pem in the options you pass to createServer.
+===============================================================================================
+openssl genrsa 1024 > private.key
+openssl req -new -key private.key -out cert.csr
+openssl x509 -req -in cert.csr -signkey private.key -out certificate.pem
+======================================================================================================
+express --view=ejs
+======================================================================================================
+var https = require('https');
+var fs = require('fs');
+
+var privateKey = fs.readFileSync( 'key.pem' );
+var certificate = fs.readFileSync( 'key-cert.pem' );
+var server = https.createServer({key: privateKey,
+  cert: certificate},app);
