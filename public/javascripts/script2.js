@@ -1,4 +1,4 @@
-var video_local = document.getElementById("video");
+var video_local = document.getElementById("recorded");
 var btn_play = document.getElementById("play");
 var btn_start = document.getElementById("start");
 var btn_stop = document.getElementById("stop");
@@ -30,6 +30,8 @@ document.getElementById('start').onclick = function () {
             }, function (error) {
                 console.log(error);
             });
+            var videoURL = window.URL.createObjectURL(stream);
+            video_local.src = videoURL;
 
 
             // document.querySelector('video').src = URL.createObjectURL(stream);

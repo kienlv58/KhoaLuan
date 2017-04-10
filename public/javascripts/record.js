@@ -13,142 +13,192 @@
 
 /* globals MediaRecorder */
 
-var mediaSource = new MediaSource();
-mediaSource.addEventListener('sourceopen', handleSourceOpen, false);
+// var mediaSource = new MediaSource();
+// mediaSource.addEventListener('sourceopen', handleSourceOpen, false);
 var mediaRecorder;
-var recordedBlobs;
-var sourceBuffer;
+var recordedBlobs = [];
+var alldata_video;
+var FOLDER_ID = "root";
 
-var gumVideo = document.querySelector('video#gum');
 var recordedVideo = document.querySelector('video#recorded');
 
-var recordButton = document.querySelector('button#record');
+var recordButton = document.querySelector('button#start');
+var stopButton = document.querySelector('button#stop');
 var playButton = document.querySelector('button#play');
 var downloadButton = document.querySelector('button#download');
-recordButton.onclick = toggleRecording;
-playButton.onclick = play;
-downloadButton.onclick = download;
+var uploadButton = document.querySelector('button#upload');
 
-// window.isSecureContext could be used for Chrome
-var isSecureOrigin = location.protocol === 'https:' ||
-    location.hostname === 'localhost';
-if (!isSecureOrigin) {
-    alert('getUserMedia() must be run from a secure origin: HTTPS or localhost.' +
-        '\n\nChanging protocol to HTTPS');
-    location.protocol = 'HTTPS';
-}
 
-var constraints = {
-    audio: true,
-    video: true
+getChromeExtensionStatus(function (status) {
+    if (status === 'installed-enabled') alert('installed');
+    if (status === 'installed-disabled') alert('installed but disabled');
+    // etc.
+});
+
+
+recordButton.onclick = function () {
+    // captureScreen();
+    getScreenId(function (error, sourceId, screen_constraints) {
+        // error    == null || 'permission-denied' || 'not-installed' || 'installed-disabled' || 'not-chrome'
+        // sourceId == null || 'string' || 'firefox'
+
+        navigator.getUserMedia = navigator.mozGetUserMedia || navigator.webkitGetUserMedia;
+        navigator.getUserMedia(screen_constraints, function (stream) {
+            navigator.getUserMedia({audio: {mimeType: 'audio/webm'}}, function (audioStream) {
+                stream.addTrack(audioStream.getAudioTracks()[0]);
+                console.log('mime', audioStream.mimeType);
+
+
+                console.log("---------------------", stream.getAudioTracks()[0]);
+            }, function (error) {
+                console.log(error);
+            });
+
+            recordedVideo.src = URL.createObjectURL(stream);
+            startRecording(stream);
+
+            recordButton.disabled = true;
+            stopButton.disabled = false;
+
+
+            // share this "MediaStream" object using RTCPeerConnection API
+        }, function (error) {
+            recordButton.disabled = false;
+            console.error(error);
+        });
+    });
 };
 
-function handleSuccess(stream) {
-    recordButton.disabled = false;
-    console.log('getUserMedia() got stream: ', stream);
-    window.stream = stream;
-    if (window.URL) {
-        gumVideo.src = window.URL.createObjectURL(stream);
-    } else {
-        gumVideo.src = stream;
-    }
-}
-
-function handleError(error) {
-    console.log('navigator.getUserMedia error: ', error);
-}
-
-navigator.mediaDevices.getUserMedia(constraints).
-then(handleSuccess).catch(handleError);
-
-function handleSourceOpen(event) {
-    console.log('MediaSource opened');
-    sourceBuffer = mediaSource.addSourceBuffer('video/webm; codecs="vp8"');
-    console.log('Source buffer: ', sourceBuffer);
-}
-
-recordedVideo.addEventListener('error', function(ev) {
-    console.error('MediaRecording.recordedMedia.error()');
-    alert('Your browser can not play\n\n' + recordedVideo.src
-        + '\n\n media clip. event: ' + JSON.stringify(ev));
-}, true);
-
-function handleDataAvailable(event) {
-    if (event.data && event.data.size > 0) {
-        recordedBlobs.push(event.data);
-    }
-}
-
-function handleStop(event) {
-    console.log('Recorder stopped: ', event);
-}
-
-function toggleRecording() {
-    if (recordButton.textContent === 'Start Recording') {
-        startRecording();
-    } else {
-        stopRecording();
-        recordButton.textContent = 'Start Recording';
-        playButton.disabled = false;
-        downloadButton.disabled = false;
-    }
-}
-
-function startRecording() {
+function startRecording(stream) {
     recordedBlobs = [];
-    var options = {mimeType: 'video/webm;codecs=vp9'};
-    if (!MediaRecorder.isTypeSupported(options.mimeType)) {
-        console.log(options.mimeType + ' is not Supported');
-        options = {mimeType: 'video/webm;codecs=vp8'};
-        if (!MediaRecorder.isTypeSupported(options.mimeType)) {
-            console.log(options.mimeType + ' is not Supported');
-            options = {mimeType: 'video/webm'};
-            if (!MediaRecorder.isTypeSupported(options.mimeType)) {
-                console.log(options.mimeType + ' is not Supported');
-                options = {mimeType: ''};
-            }
-        }
+    alldata_video = null;
+
+    mediaRecorder = new MediaRecorder(stream);
+    // mediaRecorder.mimeType = 'video/webm';
+    mediaRecorder.ondataavailable = function (blob) {
+        if (blob.data != null)
+            recordedBlobs.push(blob.data);
     }
-    try {
-        mediaRecorder = new MediaRecorder(window.stream, options);
-    } catch (e) {
-        console.error('Exception while creating MediaRecorder: ' + e);
-        alert('Exception while creating MediaRecorder: '
-            + e + '. mimeType: ' + options.mimeType);
-        return;
+    mediaRecorder.onstop = function () {
+
     }
-    console.log('Created MediaRecorder', mediaRecorder, 'with options', options);
-    recordButton.textContent = 'Stop Recording';
-    playButton.disabled = true;
-    downloadButton.disabled = true;
-    mediaRecorder.onstop = handleStop;
-    mediaRecorder.ondataavailable = handleDataAvailable;
-    mediaRecorder.start(10); // collect 10ms of data
-    console.log('MediaRecorder started', mediaRecorder);
+    mediaRecorder.start(2000);
 }
 
-function stopRecording() {
+
+stopButton.onclick = function () {
     mediaRecorder.stop();
-    console.log('Recorded Blobs: ', recordedBlobs);
-    recordedVideo.controls = true;
-}
+    recordedVideo.src = null;
 
-function play() {
-    var superBuffer = new Blob(recordedBlobs, {type: 'video/webm'});
-    recordedVideo.src = window.URL.createObjectURL(superBuffer);
-}
+    console.log("alldata_video", alldata_video);
+    recordButton.disabled = false;
+    stopButton.disabled = true;
+    playButton.disabled = false;
+    download.disabled = false;
+    uploadButton.disabled = false;
+    console.log("stop record");
+    console.log("recordedBlobs", recordedBlobs);
+    alldata_video = new Blob(recordedBlobs, {type: 'video/webm'});
 
-function download() {
-    var blob = new Blob(recordedBlobs, {type: 'video/webm'});
-    var url = window.URL.createObjectURL(blob);
+};
+playButton.onclick = function () {
+    if (alldata_video != null) {
+        recordedVideo.src = window.URL.createObjectURL(alldata_video);
+    }
+
+
+}
+downloadButton.onclick = function () {
+
+    var url = URL.createObjectURL(alldata_video);
     var a = document.createElement('a');
-    a.style.display = 'none';
+    document.body.appendChild(a);
+    a.style = 'display: none';
     a.href = url;
     a.download = 'test.webm';
-    document.body.appendChild(a);
     a.click();
-    setTimeout(function() {
-        document.body.removeChild(a);
-        window.URL.revokeObjectURL(url);
-    }, 100);
+    window.URL.revokeObjectURL(url);
+}
+
+// upload file to google driver
+uploadButton.onclick = function () {
+    console.log("acs",accessToken);
+
+    var fileupload = new File(recordedBlobs,"kien.webm",null);
+    console.log("file",fileupload);
+    insertFile(fileupload,a);
+    function  a(c) {
+        console.log(c);
+    }
+    // $.ajax({
+    //     // url: 'https://www.googleapis.com/upload/drive/v2/files',
+    //     url: 'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart',
+    //     type: 'POST',
+    //     data: alldata_video,
+    //     headers: {
+    //                 'Authorization': 'Bearer ' + accessToken
+    //             },
+    //     name:'kienkltn',
+    //     body:{
+    //             'title': "kltn_video",
+    //             'parents': [
+    //                 {
+    //                     'id': FOLDER_ID
+    //                 }
+    //             ]
+    //         },
+    //     processData: false, // tell jQuery not to process the data
+    //     contentType: false, // tell jQuery not to set contentType
+    //     success: function(results) {
+    //         console.log(JSON.stringify(results));
+    //     },
+    //     error: function(results) {
+    //         console.log(JSON.stringify(results));
+    //     }
+    // });
+
+
+}
+
+function insertFile(fileData, callback) {
+    const boundary = '-------314159265358979323846';
+    const delimiter = "\r\n--" + boundary + "\r\n";
+    const close_delim = "\r\n--" + boundary + "--";
+
+    var reader = new FileReader();
+    reader.readAsBinaryString(fileData);
+    reader.onload = function(e) {
+        var contentType = fileData.type || 'application/octet-stream';
+        var metadata = {
+            'title': "kienabc",
+            'mimeType': "video/webm"
+        };
+
+        var base64Data = btoa(reader.result);
+        var multipartRequestBody =
+            delimiter +
+            'Content-Type: application/json\r\n\r\n' +
+            JSON.stringify(metadata) +
+            delimiter +
+            'Content-Type: ' + contentType + '\r\n' +
+            'Content-Transfer-Encoding: base64\r\n' +
+            '\r\n' +
+            base64Data +
+            close_delim;
+
+        var request = gapi.client.request({
+            'path': '/upload/drive/v2/files',
+            'method': 'POST',
+            'params': {'uploadType': 'multipart'},
+            'headers': {
+                'Content-Type': 'multipart/mixed; boundary="' + boundary + '"'
+            },
+            'body': multipartRequestBody});
+        if (!callback) {
+            callback = function(file) {
+                console.log(file)
+            };
+        }
+        request.execute(callback);
+    }
 }

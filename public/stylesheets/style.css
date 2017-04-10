@@ -1,8 +1,72 @@
 body {
-  padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 a {
   color: #00B7FF;
+}
+
+.form-group {
+	margin: 20px 0;
+}
+
+#record-frame {
+	background-color: #eee;
+}
+
+/*.btn.btn-custom {
+	width: 200px;
+	height: 50px;
+}*/
+
+.navbar-login
+{
+    width: 305px;
+    padding: 10px;
+    padding-bottom: 0px;
+}
+
+.navbar-login-session
+{
+    padding: 10px;
+    padding-bottom: 0px;
+    padding-top: 0px;
+}
+
+.icon-size
+{
+    font-size: 87px;
+}
+
+.page-content {
+	margin-top: 100px;
+}
+.text-intro{
+	height: 400px;
+}
+.splash-monitor{
+	position:relative;
+}
+#btnLogin {
+  background: #c32f10;
+  color: white;
+}
+#avatar{
+  float: left;
+  display: inline-block;
+    border-radius: 50%;
+    margin-right: 20px;
+}
+#options{
+  background: #C0C0C0;
+}
+video{
+  background: #e9e9e9;
+}
+#group_btn{
+ display: block;
+ text-align: center;
+}
+.boder{
+  display: flex;
 }
