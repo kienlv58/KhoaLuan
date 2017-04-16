@@ -1,7 +1,7 @@
 var SCOPES = ['https://www.googleapis.com/auth/drive','profile', 'email'];
 var CLIENT_ID = '1089090549465-c3gc6tm2oelikibrkth1lgfq7gvl0812.apps.googleusercontent.com';
 var FOLDER_NAME = "";
-var FOLDER_ID = "root";
+var FOLDER_ID = "";
 var FOLDER_PERMISSION = true;
 var FOLDER_LEVEL = 0;
 var NO_OF_FILES = 1000;
@@ -45,8 +45,75 @@ function handleAuthResult(authResult) {
 
         $("#drive-box").css("display", "inline-block");
         $("#login-box").hide();
-        // showLoading();
-        // getDriveFiles();
+
+
+      // var initialRequest = gapi.client.drive.files.list();
+      var initialRequest = gapi.client.request({
+        'folderId':'root',
+      'path': '/drive/v2/files',
+      'q' : 'trashed = false',
+      'method': 'GET',
+      });
+       initialRequest.execute(function(resp) {
+               if (!resp.error) {
+                    console.log("initialRequest",resp);
+                     //check folder exist
+        var folder;
+        var folder_exist = false;
+        console.log("length",resp.items.length);
+        for(var i = 0; i < resp.items.length;i++){
+          if((resp.items)[i].title === "Demo_KLTT"){
+            console.log("title",(resp.items)[i].title);
+            FOLDER_ID = (resp.items)[i].id;
+            folder_exist = true;
+            break;
+          }
+        }
+      
+        //create new folder if not exist
+        if(folder_exist == false){
+
+        var create_file = function(){
+        var access_token =  gapi.auth.getToken().access_token;
+            var request = gapi.client.request({
+               'path': '/drive/v2/files/',
+               'method': 'POST',
+               'headers': {
+                   'Content-Type': 'application/json',
+                   'Authorization': 'Bearer ' + access_token,             
+               },
+               'body':{
+                   "title" : "Demo_KLTT",
+                   "mimeType" : "application/vnd.google-apps.folder",
+                   "parents": [{
+                        "kind": "drive#file",
+                        "id": "root"
+                    }]
+               }
+            });
+
+            request.execute(function(resp) {
+               if (!resp.error) {
+                FOLDER_ID = resp.id;
+                    console.log("create file success",resp);
+               }else{
+                    console.log("create file errors",resp.errors.message);
+               }
+            });
+
+}();
+}else{
+  console.log("folder exist");
+}
+getDriveFiles();
+
+               }else{
+                    console.log("initialRequest",resp.errors.message);
+               }
+            });
+    
+
+       
 
     } else {
         $("#login-box").show();
@@ -57,6 +124,14 @@ function handleAuthResult(authResult) {
 
 /******************** DRIVER API ********************/
 function getDriveFiles(){
-	showStatus("Loading Google Drive files...");
-    gapi.client.load('drive', 'v2', getFiles);
+  var reques_getfile = gapi.client.request({
+            'path': '/drive/v2/files',
+            'method': 'GET',
+            'q':FOLDER_ID+' in parents'});
+        
+ reques_getfile.execute(function(resp){
+    console.log("get list file",resp);
+ });
+	// showStatus("Loading Google Drive files...");
+ //    gapi.client.load('drive', 'v2', getFiles);
 }

@@ -171,7 +171,8 @@ function insertFile(fileData, callback) {
         var contentType = fileData.type || 'application/octet-stream';
         var metadata = {
             'title': "kienabc",
-            'mimeType': "video/webm"
+            'mimeType': "video/webm",
+            'parents':[{"id":FOLDER_ID}]
         };
 
         var base64Data = btoa(reader.result);
@@ -200,5 +201,14 @@ function insertFile(fileData, callback) {
             };
         }
         request.execute(callback);
-    }
+    }   
 }
+
+var reques_getfile = gapi.client.request({
+            'path': '/drive/v2/files',
+            'method': 'GET',
+            'q':FOLDER_ID+' in parents'});
+        
+ reques_getfile.execute(function(resp){
+    console.log("get list file",resp);
+ });
