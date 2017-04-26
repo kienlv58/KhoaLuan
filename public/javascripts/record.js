@@ -204,11 +204,3 @@ function insertFile(fileData, callback) {
     }   
 }
 
-var reques_getfile = gapi.client.request({
-            'path': '/drive/v2/files',
-            'method': 'GET',
-            'q':FOLDER_ID+' in parents'});
-        
- reques_getfile.execute(function(resp){
-    console.log("get list file",resp);
- });
