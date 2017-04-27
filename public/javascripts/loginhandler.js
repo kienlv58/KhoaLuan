@@ -62,7 +62,7 @@ function handleAuthResult(authResult) {
         var folder_exist = false;
         console.log("length",resp.items.length);
         for(var i = 0; i < resp.items.length;i++){
-          if((resp.items)[i].title === "Demo_KLTT"){
+          if((resp.items)[i].title === "EasyRC"){
             console.log("title",(resp.items)[i].title);
             FOLDER_ID = (resp.items)[i].id;
             folder_exist = true;
@@ -83,7 +83,7 @@ function handleAuthResult(authResult) {
                    'Authorization': 'Bearer ' + access_token,             
                },
                'body':{
-                   "title" : "Demo_KLTT",
+                   "title" : "EasyRC",
                    "mimeType" : "application/vnd.google-apps.folder",
                    "parents": [{
                         "kind": "drive#file",

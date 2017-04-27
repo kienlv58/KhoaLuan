@@ -28,7 +28,11 @@
     </div>
      <div class="col-md-9" id="load_video">
         <div>
-          <video id= "recorded" width="840" height="480" controls></video>
+          <!-- <video id= "recorded" width="840" height="480" controls></video> -->
+          <div style="position: relative;">
+                  <video id= "recorded" class="video-frame" controls ></video>
+                  <video id="video_small" class="video-frame" ></video>
+              </div>
         </div>
         <div id="group_btn">
           <button id="start" class="btn btn-primary btn-custom">Start Record</button>

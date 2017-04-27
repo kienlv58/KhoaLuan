@@ -20,6 +20,13 @@ var recordedBlobs = [];
 var alldata_video;
 var FOLDER_ID = "root";
 
+$('.playitem').on('click', function(e){
+    console.log("aaaaaaaaaaaaaaaa");
+    e.preventDefault();
+    $( '#modal-video').modal();
+});
+
+
 var recordedVideo = document.querySelector('video#recorded');
 
 var recordButton = document.querySelector('button#start');
@@ -82,7 +89,7 @@ function startRecording(stream) {
     mediaRecorder.onstop = function () {
 
     }
-    mediaRecorder.start(2000);
+    mediaRecorder.start(5000);
 }
 
 
@@ -203,4 +210,5 @@ function insertFile(fileData, callback) {
         request.execute(callback);
     }   
 }
+
 
