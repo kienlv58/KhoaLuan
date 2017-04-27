@@ -43,10 +43,43 @@
           <button id="stop" disabled class="btn btn-primary btn-custom">Stop Record</button>
           <button id="play" disabled class="btn btn-primary btn-custom">Playback</button>
           <button id="download" disabled class="btn btn-primary btn-custom">Download</button>
-          <button id="upload" disabled class="btn btn-primary btn-custom">Upload</button>
+          <button id="upload" disabled class="btn btn-primary btn-custom" data-toggle="modal" href='#modal-upload'>Upload</button>
         </div>
     </div>
   </div>
 
+    <!-- MODAL -->
+     <div class="modal fade" id="modal-upload" tabindex="-1" role="dialog" aria-labelledby="modal-video-label">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-upload">
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <div class="form-group">
+                                <label for="exampleInputPassword1">File name</label>
+                                <input type="text" class="form-control"
+                                       id="inputname" placeholder="filename"/>
+                                <br>
+
+                                <input type="button" class="form-control btn-primary"
+                                       id="button_send" placeholder="button_send" value="Upload"/>
+                            </div>
+                            <br>
+                            <label for="exampleInputPassword1" class="display" id="noti_name" style = "width: 100%; text-align: center; color: red;" hidden>file name incorrect</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.WebRTC-Experiment.com/getScreenId.js"></script>
+    <script src="https://cdn.webrtc-experiment.com/MediaStreamRecorder.js"></script>
+    <script src="/javascripts/record.js"></script>
 
 <% include bottom %>

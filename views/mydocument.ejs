@@ -1,20 +1,24 @@
 <% include top %>
-
+<link rel='stylesheet' href='/stylesheets/stylemydocument.css' />
 <div class="page-content container">
-	<li class="list-group-item">
-		<img src="https://s3.amazonaws.com/uifaces/faces/twitter/fffabs/128.jpg" class="media-photo" width="50" height="50">
-		<label for="checkbox3">List group item heading 2 </label>
-		<div class="pull-right action-buttons">
-		<button type="button" class="btn btn-primary" class="playitem">ccccc</button>
-			<a href="javascript:void(0)" class="playitem"><span class="glyphicon glyphicon-play"></span></a>
-			<a href="#" class="trash"><span class="glyphicon glyphicon-trash"></span></a>
-			<a href="#" class="flag"><span class="glyphicon glyphicon-share-alt"></span></a>
-		</div>
-	</li>
+    <div id="loading"></div>
+	<!--<li class="list-group-item">-->
+		<!--<img src="https://s3.amazonaws.com/uifaces/faces/twitter/fffabs/128.jpg" class="media-photo" width="50" height="50">-->
+		<!--<label for="checkbox3">List group item heading 2 </label>-->
+		<!--<div class="pull-right action-buttons">-->
+		    <!--&lt;!&ndash;<button type="button" class="btn btn-primary" class="playitem">ccccc</button>&ndash;&gt;-->
+			<!--<a href="javascript:void(0)" data-toggle="modal" data-target="#modal-video"><span class="glyphicon glyphicon-play"></span></a>-->
+			<!--<a href="#" class="trash"><span class="glyphicon glyphicon-trash"></span></a>-->
+			<!--<a href="#" class="flag"><span class="glyphicon glyphicon-share-alt"></span></a>-->
+		<!--</div>-->
+	<!--</li>-->
 
 	<!-- MODAL -->
 <!-- <div class="modal fade" id="modal-video" tabindex="-1" role="dialog" aria-labelledby="modal-video-label"> -->
-<div class="modal fade full-screen force-fullscreen" id="modal-video" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" >
+
+	
+</div>
+<div class="modal fade full-screen force-fullscreen" id="modal-video" >
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -25,16 +29,17 @@
             <div class="modal-body">
                 <div class="modal-video">
                     <div class="embed-responsive embed-responsive-16by9">
-                        <video controls="controls">
-    <source src="https://drive.google.com/uc?export=download&id=0B0JMGMGgxp9WMEdWb1hyQUhlOWs" type='video/mp4'/>
-</video>
+                        <iframe id="video-src" width="420" height="315"
+                                src="">
+                        </iframe>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-	
-</div>
+<script src="/javascripts/mydocument.js"></script>
+
+
 
 <% include bottom %>

@@ -6,6 +6,8 @@
     <link rel='stylesheet' href='/stylesheets/bootstrap.min.css' />
     <link rel='stylesheet' href='/stylesheets/style.css' />
     <link rel="chrome-webstore-item" href="https://chrome.google.com/webstore/detail/ajhifddimkapgcifgcodmmfdlknahffk">
+    <script src="/javascripts/jquery-3.1.1.min.js"></script>
+
 
 <style>
   .carousel-inner > .item > img,
@@ -27,13 +29,13 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span> 
                 </button>
-                <a href="/" class="navbar-brand">Home</a>
+                <a href="/" class="navbar-brand" style="font-size: large">EasyRC</a>
             </div>
             <div class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
                     <li><a href="/record">Record</a></li>      
                     <li><a href="/mydocument">My Document</a></li>      
-                    <li><a href="#">My Record</a></li>      
+                    <li><a href="#">Document Share</a></li>
                  </ul>
                  <ul class="nav navbar-nav navbar-right" id="login-box">
                     <button id="btnLogin" onclick="handleAuthClick(event)" class="button">Login Google+</button>
@@ -83,3 +85,6 @@
             </div>
         </div>
     </div>
+
+    <script src="/javascripts/loginhandler.js"></script>
+    <script src="https://apis.google.com/js/client.js?onload=checkAuth"></script>

@@ -96,7 +96,7 @@ recordButton.onclick = function () {
                 console.log("-----------------------------\n");
                 navigator.getUserMedia({audio: true}, function (audioStream) {
                     // merge audio tracks into the screen
-                    console.log("audio stream",audioStream);
+                    console.log("audio stream", audioStream);
                     window.stream.addTrack(audioStream.getAudioTracks()[0]);
                     startRecording(window.stream);
                     recordButton.disabled = true;
@@ -159,7 +159,7 @@ function startRecording(stream) {
     }
 
 
-    mediaRecorder = new MediaRecorder(stream,options);
+    mediaRecorder = new MediaRecorder(stream, options);
     // mediaRecorder.mimeType = 'video/webm';
     mediaRecorder.ondataavailable = function (blob) {
         if (blob.data != null)
@@ -167,7 +167,8 @@ function startRecording(stream) {
     }
     mediaRecorder.onstop = function () {
         stream.getVideoTracks()[0].stop();
-        stream.getAudioTracks()[0].stop();
+        if (stream.getAudioTracks() != null && stream.getAudioTracks().size != 0)
+            stream.getAudioTracks()[0].stop();
 
     };
     mediaRecorder.start(1000);
@@ -184,8 +185,6 @@ stopButton.onclick = function () {
 
     videocamera.pause();
     videocamera.src = null;
-
-
 
 
     alldata_video = new Blob(recordedBlobs, {type: 'video/webm'});
@@ -206,12 +205,12 @@ playButton.onclick = function () {
         recordedVideo.src = window.URL.createObjectURL(alldata_video);
         recordedVideo.play();
     }
-    console.log("cam data",alldata_cam.size);
-    if(alldata_cam != null && alldata_cam.size != 0){
+    console.log("cam data", alldata_cam.size);
+    if (alldata_cam != null && alldata_cam.size != 0) {
         $('#camera').show();
         videocamera.src = window.URL.createObjectURL(alldata_cam);
         videocamera.play();
-    }else {
+    } else {
         $('#camera').hide();
     }
 
@@ -228,19 +227,42 @@ downloadButton.onclick = function () {
     window.URL.revokeObjectURL(url);
 }
 
-// upload file to google driver
-uploadButton.onclick = function () {
-    console.log("acs", accessToken);
-    var fileupload = new File(recordedBlobs, "kien.webm", null);
-    console.log("file", fileupload);
-    insertFile(fileupload, a);
-    function a(c) {
-        console.log(c);
+$('#button_send').on("click", function (e) {
+    $('#noti_name').addClass('display');
+    e.preventDefault();
+    var name =$('#inputname').val();
+    if (name === '' || name.length > 6) {
+        console.log("sai ten",name);
+        $('#noti_name').removeClass('display');
+
+    } else {
+        console.log("dung ten",name);
+
+        var currentdate = new Date();
+        var datetime = currentdate.getDate() + "_d_"
+            + (currentdate.getMonth() + 1) + "m_"
+            + currentdate.getFullYear() + "y_"
+            + currentdate.getHours() + "h_"
+            + currentdate.getMinutes() + "m_"
+            + currentdate.getSeconds() + "s";
+
+        var fileupload = new File(recordedBlobs, name + datetime, null);
+        var fileupload_cam = new File(recordedBlobs_cam, name + datetime + "_camera", null);
+        console.log("file_screen", fileupload);
+        console.log("file_camera", fileupload_cam);
+        insertFile(fileupload, name + datetime,function (resp) {
+            console.log("upload screen info:", resp);
+        });
+        insertFile(fileupload_cam,name + datetime + "_camera", function (resp) {
+            console.log("upload camera info:", resp);
+        });
+        $('#modal-upload').modal('hide');
+
     }
-}
+});
 
-
-function insertFile(fileData, callback) {
+function insertFile(fileData,name, callback) {
+    console.log("file name",name);
     const boundary = '-------314159265358979323846';
     const delimiter = "\r\n--" + boundary + "\r\n";
     const close_delim = "\r\n--" + boundary + "--";
@@ -250,7 +272,7 @@ function insertFile(fileData, callback) {
     reader.onload = function (e) {
         var contentType = fileData.type || 'application/octet-stream';
         var metadata = {
-            'title': "kienabc",
+            'title': name,
             'mimeType': "video/webm",
             'parents': [{"id": FOLDER_ID}]
         };
