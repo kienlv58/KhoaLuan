@@ -135,7 +135,41 @@ function getDriveFiles(){
         
  reques_getfile.execute(function(resp){
     console.log("get list file",resp);
+     $.each(resp.items, function(index, val) {
+         /* iterate through array or object */
+         // console.log(val.id);
+         getDriverFileId(val.id);
+     });
  });
 	// showStatus("Loading Google Drive files...");
  //    gapi.client.load('drive', 'v2', getFiles);
+}
+
+function getDriverFileId(fileID) {
+    var request_getfolder = gapi.client.request({
+        'path': '/drive/v2/files/'+fileID,
+        'method': "GET"
+    });
+    request_getfolder.execute(function(resp){
+        console.log(resp);
+        var data = '';
+        url_image = resp.thumbnailLink;
+        data +='<li class="list-group-item">';
+        data += '<input type="hidden" class="url_video" value="'+resp.webContentLink+'">'
+        data +='<img src="'+url_image+'" alt="loi anh" class="media-photo" width="50" height="50" />';
+        data += '<label for="checkbox3">'+resp.title+'</label>';
+        data +='<div class="pull-right action-buttons">';
+        data += '<a href="javascript:void(0)" class="playitem"><span class="glyphicon glyphicon-play"></span></a>';
+        data += '<a href="#" class="trash"><span class="glyphicon glyphicon-trash"></span></a>';
+        data += '<a href="#" class="flag"><span class="glyphicon glyphicon-share-alt"></span></a>';
+        data += '</div>';
+        data += '</li></br>';
+        $('.page-content').append(data);
+    });
+
+    $('.playitem').on('click', function (e) {
+        console.log("aaaaaaaaaaaaaaaa");
+        e.preventDefault();
+        $('#modal-video').modal();
+    });
 }

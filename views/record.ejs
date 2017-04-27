@@ -11,14 +11,18 @@
 
     </div>
   </div>
+    <div id="install-button" hidden >
+        <a href="https://chrome.google.com/webstore/detail/ajhifddimkapgcifgcodmmfdlknahffk">Request Install chrome extention</a>
+    </div>
   <div class="row boder">
+
     <div class="col-md-3" id="options">
       
       <label>Webcam</label>
-      <input type="checkbox" name="">
+      <input type="checkbox" name="" id="check_camera">
       <br>
       <label>Audio</label>
-      <input type="checkbox" name="">
+      <input type="checkbox" name="" id="check_audio">
       <div>
         <br>
         <label>List Record</label>
@@ -31,7 +35,7 @@
           <!-- <video id= "recorded" width="840" height="480" controls></video> -->
           <div style="position: relative;">
                   <video id= "recorded" class="video-frame" controls ></video>
-                  <video id="video_small" class="video-frame" ></video>
+                  <video id="camera" class="video-frame" ></video>
               </div>
         </div>
         <div id="group_btn">
@@ -43,63 +47,6 @@
         </div>
     </div>
   </div>
-  <!-- <div class="form-group row">
-    <div class="col-md-3">
-      <label>Video</label>
-    </div>
-    <div class="col-md-9">
-      <select class="form-control">
-      <option value="">Webcam</option>
-      <option value="">Other Wabcam</option>
-    </select>
-    </div>
-  </div>
 
-  <div class="form-group row">
-    <div class="col-md-3">
-      <label>Audio</label>
-    </div>
-    <div class="col-md-9">
-      <input type="checkbox" value="" />
-    </div>
-  </div>
-
-  <div class="form-group row">
-    <div class="col-md-3">
-      <label>Type record</label>
-    </div>
-    <div class="col-md-9">
-      <select class="form-control">
-        <option value="">Webcam</option>
-        <option value="">Screen</option>
-      </select>
-    </div>
-  </div>
-  <div class="form-group text-center">
-    <button  id="start" class="btn btn-primary btn-custom">Start Record</button>
-  </div>
-
-  <div id="record-frame">
-    <video width="100%" height="400" id="video" autobuffer controls hidden></video>
-  </div>
-
-  <div class="form-group">
-    <div class="row">
-      <div class="col-md-3 text-center">
-        <button id="stop" disabled class="btn btn-primary btn-custom">Stop Record</button>
-      </div>
-      <div class="col-md-3 text-center">
-        <button id="play" disabled class="btn btn-primary btn-custom">Play</button>
-      </div>
-      <div class="col-md-3 text-center">
-        <button class="btn btn-primary btn-custom">Pause</button>
-      </div>
-      <div class="col-md-3 text-center">
-        <button class="btn btn-primary btn-custom">Export</button>
-      </div>
-    </div>
-  </div>
-</div> -->
-<div id="install-button"></div>
 
 <% include bottom %>
