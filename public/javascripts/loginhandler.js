@@ -1,7 +1,7 @@
 var SCOPES = ['https://www.googleapis.com/auth/drive','profile', 'email'];
 var CLIENT_ID = '1089090549465-c3gc6tm2oelikibrkth1lgfq7gvl0812.apps.googleusercontent.com';
 var FOLDER_NAME = "";
-var FOLDER_ID = "";
+FOLDER_ID = "";
 var FOLDER_PERMISSION = true;
 var FOLDER_LEVEL = 0;
 var NO_OF_FILES = 1000;
@@ -65,6 +65,8 @@ function handleAuthResult(authResult) {
           if((resp.items)[i].title === "EasyRC"){
             console.log("title",(resp.items)[i].title);
             FOLDER_ID = (resp.items)[i].id;
+            console.log("id----------",FOLDER_ID);
+                getDriveFiles();
             folder_exist = true;
             break;
           }
@@ -95,6 +97,8 @@ function handleAuthResult(authResult) {
             request.execute(function(resp) {
                if (!resp.error) {
                 FOLDER_ID = resp.id;
+                console.log("id----------",FOLDER_ID);
+                getDriveFiles();
                     console.log("create file success",resp);
                }else{
                     console.log("create file errors",resp.errors.message);
@@ -105,7 +109,7 @@ function handleAuthResult(authResult) {
 }else{
   console.log("folder exist");
 }
-getDriveFiles();
+
 
                }else{
                     console.log("initialRequest",resp.errors.message);
@@ -125,9 +129,9 @@ getDriveFiles();
 /******************** DRIVER API ********************/
 function getDriveFiles(){
   var reques_getfile = gapi.client.request({
-            'path': '/drive/v2/files',
+            'path': '/drive/v2/files/'+FOLDER_ID+'/children',
             'method': 'GET',
-            'q':FOLDER_ID+' in parents'});
+            });
         
  reques_getfile.execute(function(resp){
     console.log("get list file",resp);
