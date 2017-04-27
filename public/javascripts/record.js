@@ -239,7 +239,7 @@ $('#button_send').on("click", function (e) {
         console.log("dung ten",name);
 
         var currentdate = new Date();
-        var datetime = currentdate.getDate() + "_d_"
+        var datetime = "_"+ currentdate.getDate() + "d_"
             + (currentdate.getMonth() + 1) + "m_"
             + currentdate.getFullYear() + "y_"
             + currentdate.getHours() + "h_"
