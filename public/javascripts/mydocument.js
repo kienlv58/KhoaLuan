@@ -11,7 +11,8 @@ function getDriverFileId(fileID) {
     request_getfolder.execute(function(resp){
         console.log(resp);
         var data = '';
-        url_image = resp.thumbnailLink;
+        url_image = "https://drive-thirdparty.googleusercontent.com/16/type/video/webm";
+        // url_image = resp.thumbnailLink;
        //  url_image = "https://drive.google.com/thumbnail?authuser=0&sz=w320&id="+resp.id;
        //  url_image = "https://drive.google.com/thumbnail?sz=w100-h100&id="+resp.id;
 

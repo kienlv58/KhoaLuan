@@ -98,7 +98,7 @@ function handleAuthResult(authResult) {
                if (!resp.error) {
                 FOLDER_ID = resp.id;
                 console.log("id----------",FOLDER_ID);
-                getDriveFiles();
+                getDriveFiles()
                     console.log("create file success",resp);
                }else{
                     console.log("create file errors",resp.errors.message);
@@ -128,6 +128,7 @@ function handleAuthResult(authResult) {
 
 /******************** DRIVER API ********************/
 function getDriveFiles(){
+
   var reques_getfile = gapi.client.request({
             'path': '/drive/v2/files/'+FOLDER_ID+'/children',
             'method': 'GET',

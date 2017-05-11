@@ -127,6 +127,14 @@ video{
     padding: 0 10px;
 }
 
+.navbar-nav>li>a{
+    padding-top: 25px;
+    padding-bottom: 25px;
+}
+a.navbar-brand{
+    padding: 25px 15px;
+}
+
 html {
     min-height: 100%;
     position: relative;
